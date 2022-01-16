@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btn;
     private TextView resultText, locationText, xylocationText;
+    private LinearLayout startView, connectView;
     private GpsTracker gpsTracker;
     private String x = "", y = "", address = "";
 
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         resultText = (TextView) findViewById(R.id.resultText);
         locationText = (TextView) findViewById(R.id.location);
         xylocationText = (TextView) findViewById(R.id.xylocation);
+        startView = (LinearLayout) findViewById(R.id.startView);
+        connectView = (LinearLayout) findViewById(R.id.connectView);
 
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -145,17 +149,24 @@ public class MainActivity extends AppCompatActivity {
 
         public CopyDatabaseAsyncTask(Context context) {
 
+            startView.setVisibility(View.INVISIBLE);
+            connectView.setVisibility(View.VISIBLE);
         }
 
         String weather = "", tmperature = "", rainpercent = "",  realTime = "";
         private String nx = "55";	//위도
         private String ny = "127";	//경도
-        private String numOfRows = "10";	//정보 수
+        private String numOfRows = "14";	//정보 수
         private String pageNo = "1";	//경도
         private String baseDate = "20220111";	//조회하고싶은 날짜
         private String baseTime = "1400";	//조회하고싶은 시간
         private String type = "json";	//조회하고 싶은 type(json, xml 중 고름)
 
+
+        @Override
+        protected void onPreExecute() {
+            //백그라운드 스레드가 실행되기 전, 메인 스레드에 의해 호출되는 메서드 ( 로딩화면 불러오기 )
+        }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
@@ -251,12 +262,32 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
+
+                    if(category.equals("PTY")){
+                        weather += "\n하늘에서 ";
+                        if(fcstValue.equals("1")) {
+                            weather += "비가 내리고 ";
+                        }else if(fcstValue.equals("2")) {
+                            weather += "비와 눈이 내리고 ";
+                        }else if(fcstValue.equals("3")) {
+                            weather += "눈이 내리고 ";
+                        }else if(fcstValue.equals("4")) {
+                            weather += "소나기가 내리고 ";
+                        }else if(fcstValue.equals("0")) {
+                            weather += "아무것도 안내리고 ";
+                        }
+                    }
+
                     if(category.equals("TMP") || category.equals("T1H")){
                         tmperature = " 기온은 "+fcstValue+"℃ 입니다.";
                     }
 
+                    if(category.equals("POP")){
+                        rainpercent = " \n강수확률: "+fcstValue+"%";
+                    }
 
-                    Log.i("TAG",weather + tmperature);
+
+                    Log.i("TAG",weather + tmperature + rainpercent );
                 }
 
             } catch (Exception e) {
@@ -269,7 +300,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            resultText.setText( "현재시간은 "+ realTime + " " + weather + " " + tmperature ) ;
+            startView.setVisibility(View.VISIBLE);
+            connectView.setVisibility(View.INVISIBLE);
+            resultText.setText( "현재시간은 "+ realTime + " " + weather + " " + tmperature + rainpercent) ;
         }
 
 
