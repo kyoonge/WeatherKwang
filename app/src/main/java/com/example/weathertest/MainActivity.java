@@ -78,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
             checkRunTimePermission();
         }
 
-        //btn = findViewById(R.id.btn);
+//        //btn = findViewById(R.id.btn);
         startBtn = (ImageButton) findViewById(R.id.startBtn);
-        resultText = (TextView) findViewById(R.id.resultText);
-        locationText = (TextView) findViewById(R.id.location);
-        xylocationText = (TextView) findViewById(R.id.xylocation);
-        startView = (LinearLayout) findViewById(R.id.startView);
-        connectView = (LinearLayout) findViewById(R.id.connectView);
-        resultView = (LinearLayout) findViewById(R.id.resultView);
+//        resultText = (TextView) findViewById(R.id.resultText);
+//        locationText = (TextView) findViewById(R.id.location);
+//        xylocationText = (TextView) findViewById(R.id.xylocation);
+//        startView = (LinearLayout) findViewById(R.id.startView);
+//        connectView = (LinearLayout) findViewById(R.id.connectView);
+//        resultView = (LinearLayout) findViewById(R.id.resultView);
 
         String rDateTime[] = getRealDateTime(); //시간
         int intTime = Integer.parseInt(rDateTime[1].substring(0,2));
@@ -118,27 +118,20 @@ public class MainActivity extends AppCompatActivity {
                     //여기 잠깐 주소 마포구로 고정
                     //String localName = "마포구"; // 나중엔 삭제
 
-                    readExcel(localName); //위치
-                    //xylocationText.setText("격자값( x y ) : "+ x + " "+y);
-                    //String rDateTime[] = getRealDateTime(); //시간
-
-
-
-                    Handler handler2 = new Handler();
-                    handler2.postDelayed(new Runnable() {
+                    Handler handler1 = new Handler();
+                    handler1.postDelayed(new Runnable() {
                         public void run() {
 
-                            CopyDatabaseAsyncTask task = new CopyDatabaseAsyncTask(MainActivity.this) ;
-                            task.execute(rDateTime[0],rDateTime[1],rDateTime[2],x,y) ;
+                            Intent intent = new Intent(MainActivity.this,WeatherActivity.class);
+                            intent.putExtra("rDateTime", rDateTime);
+                            intent.putExtra("localName", localName);
+                            startActivity(intent);
+
                         }
-                    }, 500);  // 2000은 2초를 의미합니다.
+                    }, 300);  // 2000은 2초를 의미합니다.
 
-
-
-
-
-
-                } else {
+                } else
+                    {
                     // display error
                     AlertDialog.Builder alert_confirm = new AlertDialog.Builder(MainActivity.this);// 메세지
                     alert_confirm.setMessage("인터넷 연결이 필요해요\n( Wi-Fi 또는 데이터를 켜주세요! )"); // 확인 버튼 리스너
@@ -158,192 +151,20 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private class CopyDatabaseAsyncTask extends AsyncTask<String, Long, Boolean> {
-
-
-
-        public CopyDatabaseAsyncTask(Context context) {
-
-        }
-
-        String weather = "", tmperature = "", sky = "", realTime = "";
-        private String nx = "55";	//위도
-        private String ny = "127";	//경도
-        private String numOfRows = "30";	//정보 수
-        private String pageNo = "1";	//경도
-        private String baseDate = "20220111";	//조회하고싶은 날짜
-        private String baseTime = "1400";	//조회하고싶은 시간
-        private String type = "json";	//조회하고 싶은 type(json, xml 중 고름)
-
-
-        @Override
-        protected void onPreExecute() {
-            //백그라운드 스레드가 실행되기 전, 메인 스레드에 의해 호출되는 메서드 ( 로딩화면 불러오기 )
-            //로딩 UI
-            startView.setVisibility(View.INVISIBLE);
-            connectView.setVisibility(View.VISIBLE);
-
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Boolean doInBackground(String... params) {
-            //AssetManager am = mContext.getResources().getAssets() ;
-
-            //		참고문서에 있는 url주소
-            String apiUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst";
-//         홈페이지에서 받은 키
-            String serviceKey = "" + "Pc3mj0ODAsPJ1UTZ1BGByalWMKn%2BtZs9ye8MJ2mCTrZLTfOyZf1te7QKxcATs%2Bm5qGLpX8dLbwL8dhRLfRaxFw%3D%3D";
-
-            try {
-                baseDate = params[0];
-                realTime = params[1];
-                baseTime = params[2];
-                nx = params[3];
-                ny = params[4];
-                Log.i("baseTime TAG",baseTime);
-
-                StringBuilder urlBuilder = new StringBuilder(apiUrl);
-                urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+ serviceKey);
-                urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8")); //정보 수
-                urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8")); //페이지 수
-                urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode(type, "UTF-8"));	/* 타입 */
-                urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode(baseDate, "UTF-8")); /* 조회하고싶은 날짜*/
-                urlBuilder.append("&" + URLEncoder.encode("base_time","UTF-8") + "=" + URLEncoder.encode(baseTime, "UTF-8")); /* 조회하고싶은 시간 AM 02시부터 3시간 단위 */
-                urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); //경도
-                urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); //위도
-                Log.i("TAG, url Msg",urlBuilder.toString());
-                /*
-                 * GET방식으로 전송해서 파라미터 받아오기
-                 */
-                URL url = new URL(urlBuilder.toString());
-                Log.i("TAG,URL",baseDate+baseTime+nx+ny);
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("Content-type", "application/json");
-//        System.out.println("Response code: " + conn.getResponseCode());
-
-
-                BufferedReader rd;
-                if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                } else {
-                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                }
-
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                rd.close();
-                conn.disconnect();
-                String result= sb.toString();
-                Log.i("RESULT",result);
-
-                //=======이 밑에 부터는 json에서 데이터 파싱해 오는 부분이다=====//
-
-                // response 키를 가지고 데이터를 파싱
-                JSONObject jsonObj_1 = new JSONObject(result);
-                String response = jsonObj_1.getString("response");
-                Log.i("TAG,RESPONSE",response);
-
-
-                // response 로 부터 body 찾기
-                JSONObject jsonObj_2 = new JSONObject(response);
-                String body = jsonObj_2.getString("body");
-
-                // body 로 부터 items 찾기
-                JSONObject jsonObj_3 = new JSONObject(body);
-                String items = jsonObj_3.getString("items");
-                Log.i("TAG,ITEMS",items);
-
-                // items로 부터 itemlist 를 받기
-                JSONObject jsonObj_4 = new JSONObject(items);
-                JSONArray jsonArray = jsonObj_4.getJSONArray("item");
-
-                for(int i=0;i<jsonArray.length();i++){
-                    jsonObj_4 = jsonArray.getJSONObject(i);
-                    String fcstValue = jsonObj_4.getString("fcstValue");
-                    //Log.i("TAG1",fcstValue);
-                    String category = jsonObj_4.getString("category");
-                    //Log.i("TAG2",fcstValue);
-
-                    if(category.equals("SKY")&&weather.equals("")){
-                        weather = "현재 날씨는 ";
-                        if(fcstValue.equals("1")) {
-                            weather += "맑은 상태로";
-                        }else if(fcstValue.equals("2")) {
-                            weather += "비가 오는 상태로 ";
-                        }else if(fcstValue.equals("3")) {
-                            weather += "구름이 많은 상태로 ";
-                        }else if(fcstValue.equals("4")) {
-                            weather += "흐린 상태로 ";
-                        }
-                    }//Log.i("TAG,weather",weather);
-
-
-                    if(category.equals("PTY")&&sky.equals("")){
-                        sky = "\n하늘에서 ";
-                        if(fcstValue.equals("1")) {
-                            sky += "비가 내리고 ";
-                        }else if(fcstValue.equals("2")) {
-                            sky += "비와 눈이 내리고 ";
-                        }else if(fcstValue.equals("3")) {
-                            sky += "눈이 내리고 ";
-                        }else if(fcstValue.equals("4")) {
-                            sky += "소나기가 내리고 ";
-                        }else if(fcstValue.equals("0")) {
-                            sky += "아무것도 안내리고 ";
-                        }
-                    }//Log.i("TAG,sky",sky);
-
-                    if(category.equals("T1H")&&tmperature.equals("")){
-                        tmperature = " 기온은 "+fcstValue+"℃ 입니다.";
-                    }//Log.i("TAG,tmperature",tmperature);
-
-//                    if(category.equals("POP")){
-//                        rainpercent = " \n강수확률: "+fcstValue+"%";
-//                    }
-
-
-                    Log.i("TAG,결과",weather + sky + tmperature);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace() ;
-            }
-
-            return true;
-        }
-
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            resultView.setVisibility(View.VISIBLE);
-            connectView.setVisibility(View.INVISIBLE);
-            resultText.setText( realTime + " " + weather + " " + sky+ " "+ tmperature) ;
-        }
-
-
-    }
-
-
-
     public String[] getRealDateTime(){
 
-        String[] RealDateTime = new String[4]; // {  날짜, 실시간, 가공시간, 분 }
+        String[] RealDateTime = new String[5]; // {  날짜, 출력할날짜, 가공시간, 가공분, 출력할시간 }
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd", Locale.KOREAN);
         SimpleDateFormat sdf2 = new SimpleDateFormat("HH", Locale.KOREAN); //시간
-        SimpleDateFormat sdf3 = new SimpleDateFormat("MM월 dd일 HH시 mm분", Locale.KOREAN);
+        SimpleDateFormat sdf3 = new SimpleDateFormat("MM월 dd일", Locale.KOREAN);
+        SimpleDateFormat sdf5 = new SimpleDateFormat("HH:mm", Locale.KOREAN);
         SimpleDateFormat sdf4 = new SimpleDateFormat("mm", Locale.KOREAN); //분
 
         RealDateTime[0] = sdf1.format(System.currentTimeMillis());
         RealDateTime[1] = sdf3.format(System.currentTimeMillis());
         RealDateTime[2] = sdf2.format(System.currentTimeMillis());
         RealDateTime[3] = sdf4.format(System.currentTimeMillis());
+        RealDateTime[4] = sdf5.format(System.currentTimeMillis());
         if(Integer.parseInt(RealDateTime[3])>30){
             RealDateTime[3]="30";
         }else{
@@ -359,48 +180,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         Log.i("TAG.hh00",RealDateTime[2]);
-
-//        switch(RealDateTime[2]) {
-//
-//            case "0200":
-//            case "0300":
-//            case "0400":
-//                RealDateTime[2] = "0200";
-//                break;
-//            case "0500":
-//            case "0600":
-//            case "0700":
-//                RealDateTime[2] = "0500";
-//                break;
-//            case "0800":
-//            case "0900":
-//            case "1000":
-//                RealDateTime[2] = "0800";
-//                break;
-//            case "1100":
-//            case "1200":
-//            case "1300":
-//                RealDateTime[2] = "1100";
-//                break;
-//            case "1400":
-//            case "1500":
-//            case "1600":
-//                RealDateTime[2] = "1400";
-//                break;
-//            case "1700":
-//            case "1800":
-//            case "1900":
-//                RealDateTime[2] = "1700";
-//                break;
-//            case "2000":
-//            case "2100":
-//            case "2200":
-//                RealDateTime[2] = "2000";
-//                break;
-//            default:
-//                RealDateTime[2] = "2300";
-//
-//        }
         Log.i("TAG.hh00 after",RealDateTime[2]);
         return RealDateTime;
     }
@@ -591,41 +370,6 @@ public class MainActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-
-    public void readExcel(String localName) {
-
-        try {
-            InputStream is = getBaseContext().getResources().getAssets().open("local_name.xls");
-            Workbook wb = Workbook.getWorkbook(is);
-
-            if (wb != null) {
-                Sheet sheet = wb.getSheet(0);   // 시트 불러오기
-                if (sheet != null) {
-                    int colTotal = sheet.getColumns();    // 전체 컬럼
-                    int rowIndexStart = 1;                  // row 인덱스 시작
-                    int rowTotal = sheet.getColumn(colTotal - 1).length;
-
-                    for (int row = rowIndexStart; row < rowTotal; row++) {
-                        String contents = sheet.getCell(0, row).getContents();
-                        if (contents.contains(localName)) {
-                            x = sheet.getCell(1, row).getContents();
-                            y = sheet.getCell(2, row).getContents();
-                            row = rowTotal;
-                        }
-                    }
-                }
-            }
-        } catch (IOException e) {
-            Log.i("READ_EXCEL1", e.getMessage());
-            e.printStackTrace();
-        } catch (BiffException e) {
-            Log.i("READ_EXCEL1", e.getMessage());
-            e.printStackTrace();
-        }
-        // x, y = String형 전역변수
-        Log.i("격자값", "x = " + x + "  y = " + y);
-    }
-
 
 
 

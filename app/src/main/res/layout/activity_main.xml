@@ -15,143 +15,53 @@
         android:visibility="visible"
         android:background="@drawable/night">
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Hello World!"-->
-<!--            android:id="@+id/resultText"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintLeft_toLeftOf="parent"-->
-<!--            app:layout_constraintRight_toRightOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="100dp"/>-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="위치"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:id="@+id/location"/>-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="XY"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:id="@+id/xylocation"/>-->
-
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6" />
         <ImageButton
-            android:layout_width="400dp"
-            android:layout_height="200dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:scaleType="fitCenter"
             android:id="@+id/startBtn"
             android:src="@drawable/sleep"
-            android:scaleType="centerInside"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="200dp"
-            android:layout_gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="날씨 요정을 깨워주세요 (ง •̀_•́)ง"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:textSize="17dp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/dunggeunmo"/>
-
-<!--        <Button-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="날씨 레츠고"-->
-<!--            android:id="@+id/btn"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="50dp"/>-->
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/connectView"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        android:background="@drawable/universe">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="광상청··· 연결중···"
-            android:textSize="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_gravity="center"
-            android:fontFamily="@font/dunggeunmo"
-            android:textColor="#ffffff"
-            android:layout_marginTop="100dp"/>
-        <ImageView
-            android:layout_width="300dp"
-            android:layout_height="400dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/connect"/>
+            android:background="@android:color/transparent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:text="   날씨 요정을 깨워주세요 (ง •̀_•́)ง   "
+                android:gravity="center"
+                android:autoSizeMaxTextSize="30dp"
+                android:autoSizeMinTextSize="10dp"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/white"
+                android:fontFamily="@font/dunggeunmo"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6" />
 
     </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/resultView"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        android:background="#faf082">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            android:id="@+id/resultText"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_gravity="center"
-            android:layout_marginTop="100dp"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="위치"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:id="@+id/location"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="XY"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:id="@+id/xylocation"
-            android:textColor="@color/black"/>
-        <ImageView
-            android:layout_width="400dp"
-            android:layout_height="400dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/re"/>
-    </LinearLayout>
-
-
-
-
 
 
 </FrameLayout>
