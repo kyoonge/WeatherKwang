@@ -44,6 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="6"
+                android:id="@+id/startMent"
                 android:text="   날씨 요정을 깨워주세요 (ง •̀_•́)ง   "
                 android:gravity="center"
                 android:autoSizeMaxTextSize="30dp"

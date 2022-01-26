@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     //private Button btn;
     private ImageButton startBtn;
-    private TextView resultText, locationText, xylocationText;
+    private TextView startMent;
     private LinearLayout startView, connectView, resultView;
     private GpsTracker gpsTracker;
     private String x = "", y = "", address = "";
@@ -80,19 +81,20 @@ public class MainActivity extends AppCompatActivity {
 
 //        //btn = findViewById(R.id.btn);
         startBtn = (ImageButton) findViewById(R.id.startBtn);
-//        resultText = (TextView) findViewById(R.id.resultText);
+        startMent = (TextView) findViewById(R.id.startMent);
 //        locationText = (TextView) findViewById(R.id.location);
 //        xylocationText = (TextView) findViewById(R.id.xylocation);
-//        startView = (LinearLayout) findViewById(R.id.startView);
+        startView = (LinearLayout) findViewById(R.id.startView);
 //        connectView = (LinearLayout) findViewById(R.id.connectView);
 //        resultView = (LinearLayout) findViewById(R.id.resultView);
 
         String rDateTime[] = getRealDateTime(); //시간
-        int intTime = Integer.parseInt(rDateTime[1].substring(0,2));
+        int intTime = Integer.parseInt(rDateTime[4].substring(0,2));
         if(7<=intTime&&19>intTime){
             startView.setBackgroundResource(R.drawable.morning);
+            startMent.setTextColor(Color.BLACK);
         }
-        //xylocationText.setText("시간 : "+ rDateTime[1] +" " +rDateTime[1].substring(0,2)+" "+ Integer.toString(intTime));
+        Log.i("TAG.Time",rDateTime[4].substring(0,2)+" "+Integer.toString(intTime) );
 
 
         startBtn.setOnClickListener(new View.OnClickListener() {

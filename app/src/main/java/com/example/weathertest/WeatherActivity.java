@@ -130,7 +130,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         }
 
-        String weather = "", tmperature = "", sky = "", realTime = "", nowTime="", localName = "", resultPrint = "";
+        String weather = "", tmperature = "", sky = "", realTime = "", nowTime="", localName = "", resultPrint = "", response = "";
         private String nx = "55";	//위도
         private String ny = "127";	//경도
         private String numOfRows = "30";	//정보 수
@@ -211,7 +211,7 @@ public class WeatherActivity extends AppCompatActivity {
 
                 // response 키를 가지고 데이터를 파싱
                 JSONObject jsonObj_1 = new JSONObject(result);
-                String response = jsonObj_1.getString("response");
+                response = jsonObj_1.getString("response");
                 Log.i("TAG,RESPONSE",response);
 
 
@@ -294,6 +294,7 @@ public class WeatherActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) {
 
+
             if(weather.equals("1")){
                 resultPrint = "비온다!";
             }
@@ -311,22 +312,36 @@ public class WeatherActivity extends AppCompatActivity {
                     if(Integer.parseInt(tmperature)>=20){
                         resultPrint = "더워요..!";
                     }
-                    else if(Integer.parseInt(tmperature) <=-5){
+                    else if(Integer.parseInt(tmperature) <=-3){
                         resultPrint = "추워요..!";
+                        resultView.setBackgroundResource(R.drawable.cub);
+                        resultImg.setImageResource(R.drawable.cu);
                     }
                     else{
                         resultPrint = "맑아요옹>3<";
+                        resultView.setBackgroundResource(R.drawable.mub);
+                        resultImg.setImageResource(R.drawable.mu);
                     }
                 }
                 else if(sky.equals("3")){
                     resultPrint = "구름이 많아요!";
+
                 }
                 else if(sky.equals("4")){
                     resultPrint = "흐려요!";
-                    resultView.setBackgroundColor(Color.parseColor("#98b2d4"));
+                    resultView.setBackgroundResource(R.drawable.hrb);
                     resultImg.setImageResource(R.drawable.hr);
                 }
 
+            }
+            if(resultPrint.isEmpty()){
+                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(WeatherActivity.this);// 메세지
+                alert_confirm.setMessage("날씨 정보를 불러오지 못합니다.\n"+"ERROR: " + response); // 확인 버튼 리스너
+                alert_confirm.setPositiveButton("확인", null);// 다이얼로그 생성
+                AlertDialog alert = alert_confirm.create();// 아이콘
+                alert.setIcon(R.drawable.kwang);// 다이얼로그 타이틀
+                alert.setTitle("오류 메세지");// 다이얼로그 보기
+                alert.show();
             }
 
             Log.i("TAG,출력결과",resultPrint);
@@ -343,8 +358,8 @@ public class WeatherActivity extends AppCompatActivity {
             timeText.setText(nowTime);
 
             //테스트
-            //resultText.setText( "흐려요!" ) ;
-            //resultImg.setImageResource(R.drawable.hr);
+            //resultImg.setImageResource(R.drawable.cu);
+            //resultView.setBackgroundResource(R.drawable.cub);
 
         }
 
@@ -386,6 +401,15 @@ public class WeatherActivity extends AppCompatActivity {
         }
         // x, y = String형 전역변수
         Log.i("격자값", "x = " + x + "  y = " + y);
+        if(x.isEmpty()||y.isEmpty()){
+            AlertDialog.Builder alert_confirm = new AlertDialog.Builder(WeatherActivity.this);// 메세지
+            alert_confirm.setMessage("위치를 불러오는데 실패했습니다."); // 확인 버튼 리스너
+            alert_confirm.setPositiveButton("확인", null);// 다이얼로그 생성
+            AlertDialog alert = alert_confirm.create();// 아이콘
+            alert.setIcon(R.drawable.kwang);// 다이얼로그 타이틀
+            alert.setTitle("오류 메세지");// 다이얼로그 보기
+            alert.show();
+        }
     }
 
 

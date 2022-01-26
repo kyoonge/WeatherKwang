@@ -75,14 +75,14 @@
         android:layout_height="match_parent"
         android:id="@+id/resultView"
         android:visibility="invisible"
-        android:background="@drawable/hrb">
+        android:background="@drawable/cub">
 
         <ImageView
             android:id="@+id/resultImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
-            android:src="@drawable/hr" />
+            android:src="@drawable/cu" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                     android:id="@+id/dateText"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="0.8"
                     android:autoSizeTextType="uniform"
                     android:fontFamily="@font/dunggeunmo"
                     android:text="dateText"
@@ -122,7 +122,7 @@
                     android:id="@+id/timeText"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="0.8"
                     android:autoSizeTextType="uniform"
                     android:fontFamily="@font/dunggeunmo"
                     android:text="timeText"
